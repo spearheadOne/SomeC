@@ -56,28 +56,14 @@ void bit_xor(const unsigned char *bits1, const unsigned char *bits2, unsigned ch
     return;
 };
 
-void bit_rot_left(unsigned char *bits, int size, int count){
-
-    int fbit,lbit,i,j;
-
-    //rotate to left
-    if (size>0){
-        for (i=0;i<=((size-1)/8);i++){
-            //get a bit to be shiffted of the current byte
-            lbit = bit_get(&bits[i],0);
-            if (i==0){
-                //save the bit shiffted of the first byte
-                fbit=lbit;
-            } else{
-                //set rightmost bit of the previous byte to the leftmost bit
-                // about to be shifted off the cur byte
-                bit_set(&bits[i-1],7,lbit);
-            }
-            //shift curr byte to the left
-            bits[i]=bits[i]<<1;
-        }
-        //set rightmost bit of the buffer to the bit
-        // to be shifted of the first byte
-        bit_set(bits,size-1,fbit);
+void bit_rot_left(unsigned char *bits, int size, int count) {
+    if (size <= 0 || count <= 0)
+        return;
+    count %= size;
+    for (int j = 0; j < count; j++) {
+        int first = bit_get(bits, 0);
+        for (int i = 0; i < size - 1; i++)
+            bit_set(bits, i, bit_get(bits, i + 1));
+        bit_set(bits, size - 1, first);
     }
-};
+}

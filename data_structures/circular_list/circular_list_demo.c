@@ -9,28 +9,30 @@
 int main() {
 
     //linked list
-    CList *l;
+    CList storage;
+    CList *l = &storage;
+    void *removed;
 
-    int *data = 0;
-    int *data1 = 1;
-    int *data2 = 2;
+    int data = 0;
+    int data1 = 1;
+    int data2 = 2;
 
-    clist_init(l, (void *) &data);
+    clist_init(l, NULL);
     printf("Circular list has been initalized\n");
 
-    clist_ins_next(l, NULL, data);
-    clist_ins_next(l, clist_head(l), data1);
-    clist_ins_next(l, clist_next(clist_head(l)), data2);
+    clist_ins_next(l, NULL, &data);
+    clist_ins_next(l, clist_head(l), &data1);
+    clist_ins_next(l, clist_next(clist_head(l)), &data2);
 
     printf("Current linked list size %d\n", clist_size(l));
-    printf("Head elem %d\n", clist_head(l)->data);
+    printf("Head elem %d\n", *(int *)clist_head(l)->data);
 
-    printf("Next of head %d\n", clist_head(l)->next->data);
-    printf("Next next of head %d\n", clist_head(l)->next->next->data);
+    printf("Next of head %d\n", *(int *)clist_head(l)->next->data);
+    printf("Next next of head %d\n", *(int *)clist_head(l)->next->next->data);
 
-    clist_rem_next(l, clist_head(l)->next, (void *) &data2);
-    clist_rem_next(l, clist_head(l), (void *) &data1);
-    clist_rem_next(l, clist_head(l), (void *) &data);
+    clist_rem_next(l, clist_head(l)->next, &removed);
+    clist_rem_next(l, clist_head(l), &removed);
+    clist_rem_next(l, clist_head(l), &removed);
 
     printf("Linked list has been cleared\n");
 

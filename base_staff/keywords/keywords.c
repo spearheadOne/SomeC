@@ -24,14 +24,14 @@ struct key {
     int count;
 
 } keyTab[]={
-    "auto",0,
-    "break",0,
-    "case",0,
-    "char",0,
-    "const",0,
-    "continue",0,
-    "static",0,
-    "void",0
+    {"auto", 0},
+    {"break", 0},
+    {"case", 0},
+    {"char", 0},
+    {"const", 0},
+    {"continue", 0},
+    {"static", 0},
+    {"void", 0}
 
 
 
@@ -45,7 +45,7 @@ int main() {
 
     while (getWord(word, MAXWORD) != EOF) {
 
-        if (isalpha(word[0])) {
+        if (isalpha((unsigned char)word[0])) {
             if ((p = binSearch(word, keyTab, NKEYS)) != NULL) {
                 p->count++;
 
@@ -103,11 +103,12 @@ int getWord(char *word, int lim) {
     }
 
     for ( ; --lim > 0;w++) {
-        if (!isalnum(*w = getch())) {
-
-            ungetch(*w);
+        c = getch();
+        if (c == EOF || !isalnum(c)) {
+            ungetch(c);
             break;
         }
+        *w = (char)c;
 
     }
     *w = '\0';
@@ -117,12 +118,14 @@ int getWord(char *word, int lim) {
 
 int getch(void) {
 
-    return (bufp > 0) ? buf[--bufp] : getchar();
+    return (bufp > 0) ? (unsigned char)buf[--bufp] : getchar();
 
 }
 
 void ungetch(int c) {
 
+    if (c == EOF)
+        return;
     if (bufp >= BUFSIZE)
 
         printf("ungetch: too many characters\n");

@@ -67,11 +67,11 @@
          
                      }
      
-                 list->size  ;
+                 list->size++;
          return 0;
      };
  
- int dlist_ins_prev(DList *list, DListElem *elem, void **data){
+ int dlist_ins_prev(DList *list, DListElem *elem, const void *data){
          DListElem *new_elem;
      
                  if (elem == NULL && dlist_size(list) != 0) {
@@ -98,7 +98,7 @@
                          new_elem->next = elem;
                  new_elem->prev = elem->prev;
          
-                         if (elem->next == NULL) {
+                         if (elem->prev == NULL) {
                          list->head = new_elem;
                      } else {
                          elem->prev->next = new_elem;
@@ -108,7 +108,7 @@
          
                      }
      
-                 list->size  ;
+                 list->size++;
          return 0;
      };
  
@@ -146,4 +146,4 @@
          list->size--;
          return 0;
      
-             }; 
+             };

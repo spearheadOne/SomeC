@@ -1,45 +1,55 @@
-# Linux System Programming.
+# Linux system programming
 
-Examples using Linux System Functions.
+Examples using Linux system calls and libraries. Build and run this section on Linux; some APIs are unavailable on macOS.
 
-1. Change Group (change_group) - Change group which file belongs to.
-2. Child Process (child_process) - Fork a child and exit.
-3. CPU Affinity (affinity) - Show the number of used CPUs.
-4. File Operations (file_ops) - Several file operations like open,create,read,sync,truncate,seek.
-5. File Statistics (file_stat) - Print statistics of input file.
-6. Find File (find_file) - Find a file in a filesystem.
-7. Get Allocated Size (get_alloc_size) - Allocate memory and get size of it.
-8. Get Directory (get_dir) - Show path to the current directory.
-9. Map (map) - Open file and print contents.
-10. Multi signal handler (multi_signal) - Handler for various system signals
-11. Poll (poll) - Check if stdin and stdout are readable.
-12. Print Chars (print_chars) - Print chars from hardcoded string.
-13. WriteV (writev) - Create a file and write bytes to it.
-14. ReadV (readv) - Read file create by WriteV.
-15. R limits (rlimits) - Check R limits.
-16. RR Interval (rr_interval) - Get a time quantum 
-17. RR Priority (rr_priority) - Schedule a priority range.
-18. Select (select) - Read a file using blocking.
-19. Send Signal (sighup) - Send kill a signal.
-20. Set highest priority (priority) - Set priority via scheduler.
-21. Sigint handler (sigint) - Handle SIGINT.
-22. Signal payload (signal_payload) - Send a signal with payload.
-23. Small Daemon (daemon) - A tiny daemon.
-24. Sort Block (sort_block) - Get number of blocks consumed by file and print tuple (logical block-physical block).
-25. Sort Inode (sort_inode) - Get Inode of the file.
-26. Stats (stat) - Print malloc stats.
-27. Stream (stream) - Write stream to file.
-28. Time (time) - Get system time.
+## Demos
+
+| Directory | Executable | Demonstration |
+| --- | --- | --- |
+| [change_group](change_group/) | `cgg` | Change Group: Change group which file belongs to. |
+| [child_process](child_process/) | `cp` | Child Process: Fork a child and exit. |
+| [affinity](affinity/) | `cpa` | CPU Affinity: Show the number of used CPUs. |
+| [file_ops](file_ops/) | `fo` | File Operations: Several file operations like open,create,read,sync,truncate,seek. |
+| [file_stat](file_stat/) | `fs` | File Statistics: Print statistics of input file. |
+| [find_file](find_file/) | `ff` | Find File: Find a file in a filesystem. |
+| [get_alloc_size](get_alloc_size/) | `gs` | Get Allocated Size: Allocate memory and get size of it. |
+| [get_dir](get_dir/) | `gd` | Get Directory: Show path to the current directory. |
+| [map](map/) | `mp` | Map: Open file and print contents. |
+| [multi_signal](multi_signal/) | `msh` | Multi signal handler: Handler for various system signals. |
+| [poll](poll/) | `pd` | Poll: Check if stdin and stdout are readable. |
+| [print_chars](print_chars/) | `pc` | Print Chars: Print chars from hardcoded string. |
+| [writev](writev/) | `wd` | WriteV: Create a file and write bytes to it. |
+| [readv](readv/) | `rd` | ReadV: Read file create by WriteV. |
+| [rlimits](rlimits/) | `rl` | R limits: Check R limits. |
+| [rr_interval](rr_interval/) | `rr` | RR Interval: Get a time quantum . |
+| [rr_priority](rr_priority/) | `rrp` | RR Priority: Schedule a priority range. |
+| [select](select/) | `sel` | Select: Read a file using blocking. |
+| [sighup](sighup/) | `ss` | Send Signal: Send kill a signal. |
+| [priority](priority/) | `hp` | Set highest priority: Set priority via scheduler. |
+| [sigint](sigint/) | `sh` | Sigint handler: Handle SIGINT. |
+| [signal_payload](signal_payload/) | `sp` | Signal payload: Send a signal with payload. |
+| [daemon](daemon/) | `sd` | Small Daemon: A tiny daemon. |
+| [sort_block](sort_block/) | `sb` | Sort Block: Get number of blocks consumed by file and print tuple (logical block-physical block). |
+| [sort_inode](sort_inode/) | `si` | Sort Inode: Get Inode of the file. |
+| [stat](stat/) | `st` | Stats: Print malloc stats. |
+| [stream](stream/) | `str` | Stream: Write stream to file. |
+| [time](time/) | `tm` | Time: Get system time. |
 
 ## Build and run
-```
-cd <demo-dir>
-make 
-./demo-name <args>
+
+Requires a C compiler, Make, and a Linux environment. From the repository root:
+
+```sh
+cd linux_sysprog/<demo-directory>
+make
+./<executable> <arguments>
 ```
 
+Use the executable name in the table and inspect the demo source for its required arguments. The repository's root build and smoke-check targets exclude this section. These demos have not been built or run during the macOS review.
+
 ## Notes
-- Demo directory names are in ()
-- Poll can be run in format ```./pd < some-file```. Without file stdin will be checked.
-- ReadV must be run after WriteV
-- Select can be run in format ```./sel < some-file```. Without 5 second block will be made.
+
+- Poll: `./pd < some-file` checks redirected input; without redirection, it checks standard input.
+- Run ReadV after WriteV, in the same working directory, so the generated file is available.
+- Select: `./sel < some-file` checks redirected input; without ready input, it waits up to five seconds.
+- Several demos modify files, change process attributes, send signals, or start a daemon. Inspect the source and choose appropriate paths and process IDs before running them.

@@ -1,14 +1,23 @@
-CC=gcc
-CFLAGS=-c
-LDFLAGS=
-SOURCES=list.c list_demo.c
-OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=ll
+CC = cc
+CFLAGS ?= -std=c11 -Wall -Wextra -g
+CPPFLAGS ?=
+LDFLAGS ?=
+LDLIBS ?=
+SOURCES = list.c list_demo.c
+OBJECTS = $(SOURCES:.c=.o)
+DEPS = $(OBJECTS:.o=.d)
+EXECUTABLE = ll
 
-all: $(SOURCES) $(EXECUTABLE)
+.PHONY: all clean
+all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
 
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
+%.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -c $< -o $@
+
+clean:
+	$(RM) $(OBJECTS) $(DEPS) $(EXECUTABLE)
+
+-include $(DEPS)

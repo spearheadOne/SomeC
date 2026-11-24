@@ -38,10 +38,11 @@ int readLines(char *lineptr[], int maxlines) {
     char *p, line[MAXLEN];
 
     while ((len = getLine(line, MAXLEN)) > 0) {
-        if (nLines >= maxlines || (p = alloc(len)) == NULL) {
+        if (line[len - 1] == '\n')
+            line[--len] = '\0';
+        if (nLines >= maxlines || (p = alloc(len + 1)) == NULL) {
             return -1;
         } else {
-            line[len - 1] = '\0'; //delete new line
             strcpy(p, line);
             lineptr[nLines++] = p;
         }
@@ -58,7 +59,7 @@ void writeLines(char *lineptr[], int nLines) {
 }
 
 int getLine(char *s, int lim) {
-    int c, i;
+    int c = EOF, i;
 
     for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++) {
         s[i] = c;

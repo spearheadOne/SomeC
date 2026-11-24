@@ -14,6 +14,10 @@
 int main(int argc,char *argv[]){
 
     int arr1[10];
+    if (argc != 2 || (strcmp(argv[1], "ss") && strcmp(argv[1], "qs") && strcmp(argv[1], "cs"))) {
+        fprintf(stderr, "Usage: %s ss|qs|cs\n", argv[0]);
+        return 1;
+    }
 
     if (strcmp(argv[1],"ss")==0){
         refillArray(arr1,10);
@@ -27,7 +31,8 @@ int main(int argc,char *argv[]){
 
     if (strcmp(argv[1],"cs")==0){
         refillArray(arr1,10);
-        countSort(arr1,10,11);
+        if (countSort(arr1,10,11) != 0)
+            return 1;
     }
 
     return 0;
@@ -146,5 +151,5 @@ int countSort(int *data, int size, int k){
         printf("%3d",data[i]);
     }
     printf("\n");
+    return 0;
 }
-

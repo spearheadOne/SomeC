@@ -7,6 +7,7 @@ int main() {
     int c, nw, nc, nl, i, nwhite;
 
     int ndigit[10];
+    int in_word = 0;
 
     nl = nwhite = nc = nw = 0;
 
@@ -16,17 +17,24 @@ int main() {
 
     while ((c = getchar()) != EOF) {
         nc++;
+        if (c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\v' || c == '\f') {
+            in_word = 0;
+        } else if (!in_word) {
+            nw++;
+            in_word = 1;
+        }
         switch (c) {
             case '\n':
                 nl++;
                 nwhite++;
-                nw++;
                 break;
 
+            case '\r':
+            case '\v':
+            case '\f':
             case '\t':
             case ' ':
                 nwhite++;
-                nw++;
                 break;
 
             case '0':
@@ -43,7 +51,6 @@ int main() {
                 break;
 
             default:
-                nc++;
                 break;
         }
 

@@ -60,7 +60,7 @@ int list_ins_next(List *list, ListElem *elem, const void *data){
                  elem->next = new_elem;
              }
      
-                 list ->size  ;
+                 list->size++;
          return 0;
      };
  

@@ -1,14 +1,23 @@
-CC=gcc
-CFLAGS=-c
-LDFLAGS=
-SOURCES=queue.c queue_demo.c list.c
-OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=qu
- 
-all: $(SOURCES) $(EXECUTABLE)
- 
+CC = cc
+CFLAGS ?= -std=c11 -Wall -Wextra -g
+CPPFLAGS ?=
+LDFLAGS ?=
+LDLIBS ?=
+SOURCES = queue.c queue_demo.c list.c
+OBJECTS = $(SOURCES:.c=.o)
+DEPS = $(OBJECTS:.o=.d)
+EXECUTABLE = qu
+
+.PHONY: all clean
+all: $(EXECUTABLE)
+
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
- 
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
+
+%.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -MMD -MP -c $< -o $@
+
+clean:
+	$(RM) $(OBJECTS) $(DEPS) $(EXECUTABLE)
+
+-include $(DEPS)

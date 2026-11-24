@@ -19,7 +19,7 @@
  
      //init buckets
      htbl->buckets = buckets;
-     for(i=0;i< htbl->buckets;i  ){
+     for(i=0;i< htbl->buckets;i++){
          list_init(&htbl->table[i],destroy);
      }
  
@@ -35,7 +35,7 @@
  
  void chtbl_destroy(CHTbl *htbl){
          int i;
-         for(i=0;i< htbl->buckets;i  ){
+         for(i=0;i< htbl->buckets;i++){
                  list_destroy(&htbl->table[i]);
              }
      
@@ -60,8 +60,8 @@
                  //hash the key
                          bucket = htbl->h(data) % htbl->buckets;
      
-                 if ((retval == list_ins_next(&htbl->table[bucket],NULL,data))==0)
-                 htbl->size  ;
+                 if ((retval = list_ins_next(&htbl->table[bucket],NULL,data))==0)
+                 htbl->size++;
      
                  return retval;
      };

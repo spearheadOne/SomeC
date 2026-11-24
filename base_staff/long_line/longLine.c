@@ -29,7 +29,7 @@ int main() {
 
 
 int getLineLength(char *s, int lim) {
-    int c, i;
+    int c = EOF, i;
 
     for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++) {
         s[i] = c;

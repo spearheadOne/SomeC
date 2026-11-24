@@ -145,12 +145,12 @@ static void permute(unsigned char *bits, const int *mapping, int n) {
     int i;
 
     //permute buffer using n-entry mapping
-    memset(temp, 0, (int) ceil(n / 8));
+    memset(temp, 0, (n + 7) / 8);
 
     for (i = 0; i < n; i++) {
         bit_set(temp, i, bit_get(bits, mapping[i] - 1));
     }
-    memcpy(bits, temp, (int) ceil(n / 8));
+    memcpy(bits, temp, (n + 7) / 8);
 
     return;
 }
@@ -188,6 +188,8 @@ static int des_main(const unsigned char *source, unsigned char *target,
         memset(rkey, 0, 4);
 
         for (j = 0; j < 28; j++)
+            bit_set(lkey, j, bit_get(temp, j));
+        for (j = 0; j < 28; j++)
             bit_set(rkey, j, bit_get(temp, j + 28));
 
         //compute keys for each round
@@ -218,7 +220,7 @@ static int des_main(const unsigned char *source, unsigned char *target,
 
     //split text
     memcpy(lblk, &temp[0], 4);
-    memcpy(lblk, &temp[4], 4);
+    memcpy(rblk, &temp[4], 4);
 
 
     for (i = 0; i < 16; i++) {
@@ -272,7 +274,7 @@ static int des_main(const unsigned char *source, unsigned char *target,
 
     //set target text to rejoined final right and left blocks
     memcpy(&target[0], rblk, 4);
-    memcpy(&target[0], lblk, 4);
+    memcpy(&target[4], lblk, 4);
 
     //final permutation
     permute(target, DesFinal, 64);

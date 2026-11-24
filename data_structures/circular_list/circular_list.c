@@ -53,7 +53,7 @@ int clist_ins_next(CList *list, CListElem *elem, const void *data) {
         elem->next = new_elem;
     }
 
-    list->size;
+    list->size++;
     return 0;
 };
 

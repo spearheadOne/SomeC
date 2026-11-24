@@ -9,37 +9,39 @@
 int main() {
 
     //linked list
-    List *l;
+    List storage;
+    List *l = &storage;
+    void *removed;
 
-    int *data = 0;
-    int *data1 = 1;
-    int *data2 = 2;
-    int *data3 = 3;
+    int data = 0;
+    int data1 = 1;
+    int data2 = 2;
+    int data3 = 3;
 
-    list_init(l, (void *) &data);
+    list_init(l, NULL);
     printf("Linked list has been initalized\n");
 
-    list_ins_next(l, NULL, data);
-    list_ins_next(l, NULL, data1);
-    list_ins_next(l, NULL, data2);
+    list_ins_next(l, NULL, &data);
+    list_ins_next(l, NULL, &data1);
+    list_ins_next(l, NULL, &data2);
 
 
     printf("Current linked list size %d\n", list_size(l));
 
-    printf("Head elem %d\n", l->head->data);
-    printf("Next of head elem %d\n", l->head->next->data);
-    printf("Next of the next %d\n", l->head->next->next->data);
-    printf("Tail elem %d\n", l->tail->data);
+    printf("Head elem %d\n", *(int *)l->head->data);
+    printf("Next of head elem %d\n", *(int *)l->head->next->data);
+    printf("Next of the next %d\n", *(int *)l->head->next->next->data);
+    printf("Tail elem %d\n", *(int *)l->tail->data);
 
-    list_ins_next(l, l->head, data3);
+    list_ins_next(l, l->head, &data3);
 
     printf("Current linked list size %d\n", list_size(l));
-    printf("New next of head %d\n", l->head->next->data);
+    printf("New next of head %d\n", *(int *)l->head->next->data);
 
-    list_rem_next(l, NULL, (void *) &data);
-    list_rem_next(l, NULL, (void *) &data1);
-    list_rem_next(l, NULL, (void *) &data2);
-    list_rem_next(l, NULL, (void *) &data3);
+    list_rem_next(l, NULL, &removed);
+    list_rem_next(l, NULL, &removed);
+    list_rem_next(l, NULL, &removed);
+    list_rem_next(l, NULL, &removed);
 
     printf("Linked list has been cleared\n");
 

@@ -8,12 +8,14 @@
 
 int main() {
 
-    Queue *queue;
-    int *data = 0;
-    int *data1 = 1;
-    int *data2 = 2;
+    Queue storage;
+    Queue *queue = &storage;
+    void *removed;
+    int data = 0;
+    int data1 = 1;
+    int data2 = 2;
 
-    queue_init(queue, (void *) &data);
+    queue_init(queue, NULL);
 
     printf("Queue has been created\n");
     queue_enqueue(queue, &data);
@@ -23,9 +25,12 @@ int main() {
 
     printf("Queue size %d\n", queue_size(queue));
 
-    queue_dequeue(queue, &data);
-    queue_dequeue(queue, &data1);
-    queue_dequeue(queue, &data2);
+    queue_dequeue(queue, &removed);
+    printf("Removed %d\n", *(int *)removed);
+    queue_dequeue(queue, &removed);
+    printf("Removed %d\n", *(int *)removed);
+    queue_dequeue(queue, &removed);
+    printf("Removed %d\n", *(int *)removed);
 
     printf("Queue has been cleared\n");
 

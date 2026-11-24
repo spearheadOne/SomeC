@@ -8,45 +8,34 @@
 #include "bit_ops.h"
 
 
-int main(int argc, char *argv[]){
-
-    unsigned char *bits1;
-    unsigned char *bits2;
-    unsigned char *bits3;
-
-
-    unsigned char a='abcde';
-    bits1 =&a;
-
-    unsigned char b='aegh';
-    bits2 =&b;
-
-    int bit4=0;
-    if (strcmp(argv[1],"bg")==0){
-        bit4=bit_get(bits1, 4);
-        printf("Bit val at position 4 of string 'abcde' %2d\n",bit4);
+int main(int argc, char *argv[]) {
+    unsigned char bits1[] = "abcde";
+    unsigned char bits2[] = "aeghi";
+    unsigned char bits3[5] = {0};
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s bg|bs|bx|br\n", argv[0]);
+        return 1;
     }
-
-    if (strcmp(argv[1],"bs")==0){
+    if (strcmp(argv[1], "bg") == 0) {
+        printf("Bit val at position 4 of string 'abcde' %d\n", bit_get(bits1, 4));
+    } else if (strcmp(argv[1], "bs") == 0) {
         bit_set(bits1, 4, 1);
-        bit4=bit_get(bits1, 4);
-        printf("New bit val at position 4 of string 'abcde' %2d\n",bit4);
+        printf("New bit val at position 4 of string 'abcde' %d\n", bit_get(bits1, 4));
+    } else if (strcmp(argv[1], "bx") == 0) {
+        bit_xor(bits1, bits2, bits3, 40);
+        printf("XOR bytes:");
+        for (int i = 0; i < 5; i++)
+            printf(" %02x", bits3[i]);
+        printf("\n");
+    } else if (strcmp(argv[1], "br") == 0) {
+        bit_rot_left(bits2, 40, 8);
+        printf("Rotated %s\n", bits2);
+    } else {
+        fprintf(stderr, "Unknown operation: %s\n", argv[1]);
+        return 1;
     }
-
-    if (strcmp(argv[1],"bx")==0){
-        bit_xor(bits1,bits2,bits3,64);
-        printf("XOR-ed %s\n",bits3);
-    }
-
-    if (strcmp(argv[1],"br")==0){
-        bit_rot_left(bits2,16,8);
-        printf("Rotated %s\n",bits2);
-    }
-
     return 0;
 }
-
-
 
 int bit_get(const unsigned char *bits,int pos){
 
@@ -98,28 +87,14 @@ void bit_xor(const unsigned char *bits1, const unsigned char *bits2, unsigned ch
     return;
 };
 
-void bit_rot_left(unsigned char *bits, int size, int count){
-
-    int fbit,lbit,i,j;
-
-    //rotate to left
-    if (size>0){
-        for (i=0;i<=((size-1)/8);i++){
-            //get a bit to be shiffted of the current byte
-            lbit = bit_get(&bits[i],0);
-            if (i==0){
-                //save the bit shiffted of the first byte
-                fbit=lbit;
-            } else{
-                //set rightmost bit of the previous byte to the leftmost bit
-                // about to be shifted off the cur byte
-                bit_set(&bits[i-1],7,lbit);
-            }
-            //shift curr byte to the left
-            bits[i]=bits[i]<<1;
-        }
-        //set rightmost bit of the buffer to the bit
-        // to be shifted of the first byte
-        bit_set(bits,size-1,fbit);
+void bit_rot_left(unsigned char *bits, int size, int count) {
+    if (size <= 0 || count <= 0)
+        return;
+    count %= size;
+    for (int j = 0; j < count; j++) {
+        int first = bit_get(bits, 0);
+        for (int i = 0; i < size - 1; i++)
+            bit_set(bits, i, bit_get(bits, i + 1));
+        bit_set(bits, size - 1, first);
     }
-};
+}

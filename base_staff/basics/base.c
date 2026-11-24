@@ -15,6 +15,19 @@
 int main(int argc, char *argv[]) {
 
 
+    if (argc < 2 ||
+        ((strcmp(argv[1], "bc") == 0 || strcmp(argv[1], "mn") == 0) && argc != 3) ||
+        (strcmp(argv[1], "dy") == 0 && argc != 5)) {
+        fprintf(stderr, "Usage: %s hw|fc|bc number|dy year month day|mn month|fac|ec words\n", argv[0]);
+        return 1;
+    }
+    if (strcmp(argv[1], "hw") && strcmp(argv[1], "fc") &&
+        strcmp(argv[1], "bc") && strcmp(argv[1], "dy") &&
+        strcmp(argv[1], "mn") && strcmp(argv[1], "fac") && strcmp(argv[1], "ec")) {
+        fprintf(stderr, "Unknown demo: %s\n", argv[1]);
+        return 1;
+    }
+
     if (strcmp(argv[1],"hw")==0){
         printf("hello world\n");
     }
@@ -25,7 +38,6 @@ int main(int argc, char *argv[]) {
 
     if (strcmp(argv[1],"bc")==0){
         long num = strtol(argv[2],NULL,10);
-        u_int nm = (u_int) num;
 
         int a = bitCount(num);
         printf("Number of 1-bits in %ld is: %2d\n",num, a);
@@ -42,6 +54,10 @@ int main(int argc, char *argv[]) {
         int d = (int)day;
 
         int day_of_year = dayOfYear(y, m, d);
+        if (day_of_year < 0) {
+            fprintf(stderr, "Invalid date\n");
+            return 1;
+        }
         printf("%d %d %d is %d day of year\n",d,m,y, day_of_year);
     }
 
@@ -55,11 +71,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (strcmp(argv[1],"ec")==0){
-        echo(argc, argv);
-    }
-
-    if (strcmp(argv[1],"ec")==0){
-        echo(argc, argv);
+        echo(argc - 1, argv + 1);
     }
 
     if (strcmp(argv[1],"fac")==0){
@@ -68,7 +80,7 @@ int main(int argc, char *argv[]) {
 
         }
 
-        for (int i=11;i< 20;i++){
+        for (int i=10;i<= 12;i++){
             printf("Factorial of %d is %2d\n",i,factTail(i,1));
 
         }
@@ -110,7 +122,9 @@ int dayOfYear(int year, int month, int day) {
             {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},    //leap number of days
 
     };
-    leap = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+    leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+    if (month < 1 || month > 12 || day < 1 || day > dayTab[leap][month])
+        return -1;
 
     for (i = 1; i < month; i++) {
         day += dayTab[leap][i];
@@ -157,7 +171,7 @@ int factTail(int n,int a){
     if (n<0){
         return 0;
     } else if(n==0){
-        return 1;
+        return a;
     } else if(n==1){
         return a;
     } else {
