@@ -1,10 +1,10 @@
 # Graphics
 
-Placeholder for future low-level graphics demos in C.
+SDL3 based graphics demo 
 
 ## Demos
 
-No source files, Makefiles, or runnable demos are present yet.
+1) framebuffer
 
 ## Build and run
 
