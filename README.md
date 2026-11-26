@@ -12,7 +12,7 @@ The [Basics examples](base_staff/README.md) include adaptations of examples and 
 | [Data structures](data_structures/README.md) | Lists, hash table, set, stack, queue | macOS and Linux |
 | [Encryption](encryption/README.md) | Educational DES and RSA examples | macOS and Linux |
 | [Linux system programming](linux_sysprog/README.md) | Linux system calls, processes, signals, files, scheduling | Linux |
-| [Graphics](grapihcs/README.md) | Placeholder for future graphics demos | No demos yet |
+| [Graphics](grapihcs/README.md) | SDL3 software framebuffer and pixel animation | SDL3 required; defaults to macOS/Homebrew paths |
 
 ## Build and run
 
@@ -27,7 +27,7 @@ make check-sanitize           # Repeat with address and undefined-behavior sanit
 make clean                    # Remove portable build outputs
 ```
 
-The root targets exclude `linux_sysprog`. Each section README lists executable names, arguments, and sample inputs. To build one demo:
+The root targets exclude `linux_sysprog` and Graphics. Build the SDL3 demo separately using the [Graphics instructions](grapihcs/README.md). Each section README lists executable names, arguments, and sample inputs. To build one demo:
 
 ```sh
 cd data_structures/circular_list
@@ -39,4 +39,4 @@ Use `make CC=clang` or `make CC=gcc` to select a compiler. Apple's `gcc` command
 
 ## Verification
 
-The smoke checks build fresh copies in a temporary directory, exercise every documented portable command mode, and verify representative output. They include piped input, empty input, missing arguments, FIFO/LIFO ordering, and DES/RSA known results and round trips. They do not build or run Linux system-programming examples.
+The smoke checks build fresh copies in a temporary directory, exercise every documented portable command mode, and verify representative output. They include piped input, empty input, missing arguments, FIFO/LIFO ordering, and DES/RSA known results and round trips. They do not build or run Linux system-programming examples or the SDL3 graphics demo.
