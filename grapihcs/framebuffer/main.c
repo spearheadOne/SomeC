@@ -61,6 +61,8 @@ int main(void) {
     SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
     uint8_t is_running = 1;
+    uint32_t frame = 0;
+
     while (is_running) {
         uint64_t start = SDL_GetPerformanceCounter();
 
@@ -71,15 +73,11 @@ int main(void) {
             }
         }
 
-        clear(0xFFFFFFF);
+        clear(0x2A2A2A);
 
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                if( x % 5 == 0) {
-                    put_pixel(x, y, 0x00FFFF);
-                }
-            }
-        }
+        int x = frame % WIDTH;
+        int y = HEIGHT / 2;
+        put_pixel(x, y, 0x00FF00);
 
         //copy framebuffer to texture
         SDL_UpdateTexture(texture, NULL, framebuffer,WIDTH * sizeof(uint32_t));
@@ -97,6 +95,8 @@ int main(void) {
         if (elapsed < target_fps) {
             SDL_Delay((target_fps - elapsed) * 1000);
         }
+
+        frame++;
     }
 
     SDL_DestroyTexture(texture);
