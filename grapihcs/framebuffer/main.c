@@ -14,11 +14,19 @@ void put_pixel(int x, int y, uint32_t color) {
     }
 }
 
+void clear(uint32_t color) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++) {
+        framebuffer[i] = color;
+    }
+}
+
 int main(void) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
+
+    double target_fps = 1.0 / 60.0;
 
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -54,6 +62,8 @@ int main(void) {
 
     uint8_t is_running = 1;
     while (is_running) {
+        uint64_t start = SDL_GetPerformanceCounter();
+
         /* Poll events */
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
@@ -61,8 +71,15 @@ int main(void) {
             }
         }
 
+        clear(0xFFFFFFF);
 
-        put_pixel(WIDTH/2,HEIGHT/2,0xFF0000);
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if( x % 5 == 0) {
+                    put_pixel(x, y, 0x00FFFF);
+                }
+            }
+        }
 
         //copy framebuffer to texture
         SDL_UpdateTexture(texture, NULL, framebuffer,WIDTH * sizeof(uint32_t));
@@ -71,6 +88,15 @@ int main(void) {
         SDL_RenderClear(renderer);
         SDL_RenderTexture(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
+
+        uint64_t end = SDL_GetPerformanceCounter();
+
+        double elapsed = (double) (end - start) / (double) SDL_GetPerformanceFrequency();
+
+        // cap framerate to 60fps
+        if (elapsed < target_fps) {
+            SDL_Delay((target_fps - elapsed) * 1000);
+        }
     }
 
     SDL_DestroyTexture(texture);
