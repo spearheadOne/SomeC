@@ -7,6 +7,13 @@
 
 uint32_t framebuffer[WIDTH * HEIGHT];
 
+
+void put_pixel(int x, int y, uint32_t color) {
+    if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+        framebuffer[y * WIDTH + x] = color;
+    }
+}
+
 int main(void) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
@@ -55,7 +62,7 @@ int main(void) {
         }
 
 
-        framebuffer[16500] = 0xFF0000; //red
+        put_pixel(WIDTH/2,HEIGHT/2,0xFF0000);
 
         //copy framebuffer to texture
         SDL_UpdateTexture(texture, NULL, framebuffer,WIDTH * sizeof(uint32_t));
